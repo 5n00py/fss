@@ -6,15 +6,24 @@
 #   Designed to be sourced in other scripts or shell sessions.
 # Example:
 #   source $FSS_ROOT_DIR/lib/fd_builder.sh 
-#   fd_add_type "f"
+#   fd_set_type "f"
 #   fd_add_extensions "txt" "md"
 #   fd_add_ignore_case
 #   fd_set_pattern "example"
 #   fd_set_path "/path/to/search"
 #   fd_execute
 
-# Initialize the command components
-_fd_options=("fd")
+# Source the configuration parser script using the FSS_ROOT_DIR environment
+# variable
+# shellcheck disable=SC1091
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+
+# Parse the FD configuration from the fss.config file
+parse_config "FD"
+
+# Initialize the command components using the command name from the
+# configuration
+_fd_options=("${COMMAND_NAME:-fd}")  # Default to 'fd' if COMMAND_NAME is not set
 _fd_pattern=""
 _fd_path="."
 
@@ -94,12 +103,12 @@ fd_build_command() {
 # Usage:
 #   fd_execute
 fd_execute() {
-    # Build the command
-    local fd_command=("${_fd_options[@]}")
-    [ -n "$_fd_pattern" ] && fd_command+=("$_fd_pattern")
-    [ -n "$_fd_path" ] && fd_command+=("$_fd_path")
+    # Build the command using fd_build_command
+    local fd_command_array
+    mapfile -t fd_command_array <<< "$(fd_build_command)"  # Safe way to convert string to array
 
     # Execute the command
-    echo "Executing: ${fd_command[*]}"
-    "${fd_command[@]}"
+    echo "Executing: ${fd_command_array[*]}"
+    "${fd_command_array[@]}"
 }
+
