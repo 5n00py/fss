@@ -22,9 +22,18 @@
 parse_config() {
     local section=$1
     local in_section=false
-    local config_file="$FSS_ROOT_DIR/config/fss.conf"
+    local user_config_file="$HOME/.config/fss/fss.conf"
+    local default_config_file="$FSS_ROOT_DIR/config/fss.conf"
+    local config_file
 
-    # Check if configuration file exists
+    # Check if the user-specific configuration file exists, otherwise use the default
+    if [ -f "$user_config_file" ]; then
+        config_file="$user_config_file"
+    else
+        config_file="$default_config_file"
+    fi
+
+    # Check if the resolved configuration file exists
     if [ ! -f "$config_file" ]; then
         echo "config_parser.sh Error: Configuration file not found: $config_file"
         exit 1
@@ -43,3 +52,4 @@ parse_config() {
         fi
     done < "$config_file"
 }
+
