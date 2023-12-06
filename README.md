@@ -36,7 +36,8 @@ configuration:
 ### Basic Search Tools
 
 - [fd](https://github.com/sharkdp/fd): A simple, fast, and user-friendly
-  alternative to `find`. **Important Note:**: On certain Linux distributions,
+  alternative to `find`. 
+  **Important Note:**: On certain Linux distributions,
   such as Debian, the `fd` command might be named `fdfind` or simlar, due to
   naming conflicts. In such cases, creating a symbolic link for `fd` or
   modifying the command name in the [fss.conf](/config/fss.conf) file is
@@ -121,3 +122,35 @@ Apply the changes by reloading your shell configuration:
 source ~/.bashrc    # For Bash
 source ~/.zshrc     # For Zsh
 ```
+
+## Configuration
+
+The fss project comes equipped with a default configuration file, [fss.conf](/config/fss.conf),
+which is sources automatically by the project's scripts. This default
+configuration sets up the essential parameters for the tool's operation.
+
+To personalize the configs according to your needs follow these steps:
+
+1. Copy the default configuration file into your own `.config/fss` directory.
+   This allows you to modify settings without affecting the original
+   configuration:
+
+   ```bash
+   mkdir -p ~/.config/fss
+   cp /path/to/fss/config/fss.conf ~/.config/fss/fss.conf
+   ```
+   *Note:* Replace `/path/to/fss` with the actual path to the `fss` project.
+
+2. To edit the custom configuration open the copied `fss.conf` file in your
+   preferred text editor:
+
+   ```bash
+   nvim ~/.config/fss/fss.conf
+   ```
+
+3. Within the `fss.conf` file you have now the freedom to specify settings
+   which fit your workflow.
+
+Fss will prioritize the configuration file located at `~/.config/fss/fss.conf`
+if it is present.
+
