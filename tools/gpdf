@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# gpdf: Search for a specified pattern in PDF files within the current directory
+# and its subdirectories. Utilize pdfgrep for searching, fzf for selection with
+# a text preview highlighting the pattern, and open the selected PDF at the
+# specific page in zathura.
+# Usage: gpdf [pattern]
+
+# shellcheck disable=SC1091
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+source "$FSS_ROOT_DIR/lib/pdfgrep_builder.sh"
+source "$FSS_ROOT_DIR/lib/fzf_builder.sh"
+
+# Assign the first command line argument to 'pattern'
+pattern="$1"
+
+# Parse the PDF section from the configuration file
+parse_config "PDF"
+
+# Build the pdfgrep command using pdfgrep_builder.sh functions
+pdfgrep_set_pattern "$pattern"
+pdfgrep_add_ignore_case
+pdfgrep_add_recursive
+pdfgrep_add_print_page_number
+
+# Build the fzf command using fzf_builder.sh functions
+fzf_add_delimiter ':'
+fzf_add_preview_window_options 'top:66%'
+
+if [ -z "$pattern" ]; then
+    # If no pattern is provided, list all PDF files and use fzf for selection
+	fzf_add_preview "${PREVIEW_COMMAND_FIND//\"/} {}"
+    selected_file=$(find . -name "*.pdf" | fzf_execute)
+    page=1
+else
+    fzf_add_preview "${PREVIEW_COMMAND_GREP//\"/} {}"
+    # Execute the pdfgrep command and pass results to fzf
+    selected_result=$(pdfgrep_execute | fzf_execute)
+
+    # Extract filename and page number from the selection
+    if [ -n "$selected_result" ]; then
+        selected_file=$(echo "$selected_result" | cut -d: -f1)
+        page=$(echo "$selected_result" | cut -d: -f2 | tr -d 'p')
+    fi
+fi
+
+# Open the selected file with the specified PDF open command
+if [ -n "$selected_file" ]; then
+    open_command=$(echo "$OPEN_COMMAND" | sed "s|{file}|$selected_file|g" | sed "s|{page}|$page|g")
+
+    eval "$open_command" &
+fi
