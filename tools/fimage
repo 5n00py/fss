@@ -5,6 +5,7 @@
 # argument, pre-filter by it, preview using in fzf and open the selected image.
 # Usage: fimage [pattern]
 
+# shellcheck disable=SC1091
 source "$FSS_ROOT_DIR/lib/config_parser.sh"
 source "$FSS_ROOT_DIR/lib/fd_builder.sh"
 source "$FSS_ROOT_DIR/lib/fzf_builder.sh"
