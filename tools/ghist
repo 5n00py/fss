@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# ghist: Grep search for commands in the shell history file, display the
+# results in the fzf interface, and copy the selected command to the clipboard.
+# Usage: ghist [pattern]
+
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+
+# Parse the SHELL section from the configuration file
+parse_config "SHELL"
+
+# Assign the first command line argument to 'keyword'
+pattern="$1"
+
+# Expand tilde in history file path
+HISTORY_FILE_EXPANDED="${HISTORY_FILE/#\~/$HOME}"
+
+# Check if the expanded history file exists
+if [ ! -f "$HISTORY_FILE_EXPANDED" ]; then
+    echo "History file not found: $HISTORY_FILE_EXPANDED"
+    exit 1
+fi
+
+# Check if xclip is installed
+if ! command -v xclip &> /dev/null; then
+    echo "xclip is required but not installed."
+    exit 1
+fi
+
+# Search the history file for the given pattern, process the output,
+# remove duplicates, and present it to the user via fzf for selection.
+# - grep: Filters the history based on the pattern.
+# - sed: Processes each line to format it correctly (e.g., remove timestamps).
+# - sort | uniq: Removes duplicate commands.
+# - fzf: Interactive command picker
+selected_command=$(grep -F "$pattern" "$HISTORY_FILE_EXPANDED" \
+    | sed 's/^[^;]*;//' | sort | uniq | fzf )
+
+# Check if a command was selected
+if [ -n "$selected_command" ]; then
+    # Copy the selected command to the clipboard
+    echo "$selected_command" | xclip -selection clipboard
+    
+    # Provide feedback to the user
+    echo "Command copied to clipboard:"
+    echo "$selected_command"
+    echo "Paste it in the terminal to run or integrate."
+fi
