@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# fimage: Search for images starting from the current directory by file types
+# as defined in the fss.conf. If a pattern (keyword) is provided as an
+# argument, pre-filter by it, preview using in fzf and open the selected image.
+# Usage: fimage [pattern]
+
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+source "$FSS_ROOT_DIR/lib/fd_builder.sh"
+source "$FSS_ROOT_DIR/lib/fzf_builder.sh"
+
+# Assign the first command line argument to 'pattern'
+pattern="$1"
+
+# Parse the IMAGE section from the configuration file
+parse_config "IMAGE" || { echo "Failed to parse config"; exit 1; }
+
+# Initialize fd_command and set type to file
+fd_add_type "f"
+
+# Add extensions to the search command
+fd_add_extensions "${EXTENSIONS[@]//\"/}"
+
+# Add the pattern to the search command if provided
+fd_set_pattern "$pattern"
+
+# Construct the fzf command with a preview
+fzf_add_preview "${PREVIEW_COMMAND//\"/} {}"
+
+# Use fd_command to search for images and pipe the results into the fzf command
+selected_image=$(fd_execute | fzf_execute)
+
+# Open the selected image if any were selected
+if [ -n "$selected_image" ]; then
+    # Open the selected image with the specified image open command
+    eval "${OPEN_COMMAND//\"/} \"$selected_image\"" &> /dev/null &
+fi
