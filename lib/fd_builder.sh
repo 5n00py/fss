@@ -6,17 +6,12 @@
 #   Designed to be sourced in other scripts or shell sessions.
 # Example:
 #   source $FSS_ROOT_DIR/lib/fd_builder.sh 
-#   fd_set_type "f"
+#   fd_add_type "f"
 #   fd_add_extensions "txt" "md"
 #   fd_add_ignore_case
 #   fd_set_pattern "example"
 #   fd_set_path "/path/to/search"
 #   fd_execute
-
-# Source the configuration parser script using the FSS_ROOT_DIR environment
-# variable
-# shellcheck disable=SC1091
-source "$FSS_ROOT_DIR/lib/config_parser.sh"
 
 # Parse the FD configuration from the fss.config file
 parse_config "FD"
@@ -80,35 +75,32 @@ fd_set_path() {
     _fd_path="$path"
 }
 
-# Function: fd_build_command
+# Function: fd_echo_command
 # Description:
-#   Constructs the complete 'fd' command from the global variables.
-#   It combines options, pattern, and path into a single command.
-#   Ensures that empty patterns or paths are not included.
+#   Constructs and echoes the complete 'fd' command from the global variables.
+#   It combines options, pattern, and path into a single command string.
+#   This function ensures that empty patterns or paths are not included.
+#   The command is echoed for review or external execution, but not executed.
 # Usage:
-#   fd_build_command
-#   After calling this function, '_fd_command' will contain the full command.
-fd_build_command() {
+#   fd_echo_command
+#   After calling this function, the constructed command is displayed.
+fd_echo_command() {
     local fd_command=("${_fd_options[@]}")
     [ -n "$_fd_pattern" ] && fd_command+=("$_fd_pattern")
     [ -n "$_fd_path" ] && fd_command+=("$_fd_path")
 
-    echo "${fd_command[@]}"
+    echo "Constructed command: ${fd_command[*]}"
 }
 
 # Function: fd_execute
 # Description:
 #   Builds and executes the 'fd' command based on the current settings.
-#   It combines the options, pattern, and path, then executes the command.
 # Usage:
 #   fd_execute
 fd_execute() {
-    # Build the command using fd_build_command
-    local fd_command_array
-    mapfile -t fd_command_array <<< "$(fd_build_command)"  # Safe way to convert string to array
+    local fd_command=("${_fd_options[@]}")
+    [ -n "$_fd_pattern" ] && fd_command+=("$_fd_pattern")
+    [ -n "$_fd_path" ] && fd_command+=("$_fd_path")
 
-    # Execute the command
-    echo "Executing: ${fd_command_array[*]}"
-    "${fd_command_array[@]}"
+    "${fd_command[@]}"
 }
-
