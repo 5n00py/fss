@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# gkill: Interactively select a process to kill using fzf, can be pre-filtered
+# with a pattern (keyword).
+# Usage: fkill [pattern]
+
+# Assign the first command line argument to 'pattern' (if provided)
+pattern="$1"
+
+# Get a list of processes, optionally filter by keyword, and use fzf to select one
+if [ -n "$pattern" ]; then
+	# Note: Using pgrep is not consistent with the format here as for
+	# selection. Therefore use 'grep -v grep' to filter the grep command itself
+	# from the search results.
+	# shellcheck disable=SC2009
+	selected_process=$(ps aux | grep -v grep | awk -v pattern="$pattern" '$0~pattern' | fzf)
+
+else
+    selected_process=$(ps aux | fzf)
+fi
+
+# Check if a process was selected
+if [ -n "$selected_process" ]; then
+    pid=$(echo "$selected_process: " | awk '{print $2}')
+    
+    # Prompt for confirmation before killing the process
+    read -r -p "Kill process $pid? [y/n]: " confirm
+    if [[ $confirm =~ ^[yY]$ ]]; then
+        kill -9 "$pid"
+        echo "Process $pid killed."
+    else
+        echo "Process killing cancelled."
+    fi
+else
+    echo "No process selected."
+fi
