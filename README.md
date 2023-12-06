@@ -65,3 +65,59 @@ configuration:
 **Note:** Some of these dependencies are based on the default configuration of
 the scripts and might change if you modify the `fss.conf` configuration file.
 Adjust the dependencies accordingly based on your custom configuration.
+
+## Installation
+
+### 1. Clone the Repository 
+
+Clone the fss repository from GitHub. You can do this using either
+HTTPS or SSH. Choose the method that suits your setup:
+
+- *Using HTTPS:* 
+  ```bash 
+  git clone https://github.com/5n00py/fss.git
+  ```
+
+- *Using SSH:* 
+  ```bash 
+  git clone git@github.com:5n00py/fss.git
+  ```
+
+### 2. Make the Scripts Executable 
+
+Ensure the scripts in the tools directory are executable.
+
+```bash
+chmod +x /path/to/fss/tools/*
+```
+
+Don't forget to replace `/path/to/fss` with the actual path.
+
+### 3. Add the Scripts Your PATH 
+
+Set the `FSS_ROOT_DIR` environment variable to the path of the cloned `fss`
+repository. This allows the scripts to correctle source configurations and
+libraries.
+```bash
+export FSS_ROOT_DIR="$HOME/path/to/fss"
+```
+
+Include the `fss` tools directory in your `PATH` for convenient access to the
+scripts:
+
+```bash
+export PATH="$FSS_ROOT_DIR/tools:$PATH"
+```
+
+*Note:* Don't forget to replace `/path/to/fss` with the actual path to the
+`fss` project.
+
+To make these changes permanent, append the above export commands to your 
+shell's configuration file (such as `~/.bashrc` for Bash or `~/.zshrc` for Zsh).
+
+Apply the changes by reloading your shell configuration:
+
+```bash
+source ~/.bashrc    # For Bash
+source ~/.zshrc     # For Zsh
+```
