@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# fvideo: Search for videos starting from the current directory by file types
+# as defined in the ffs.conf. If a pattern (keyword) is provided as an
+# argument, pre-filter by it, preview mediainfo using fzf and open the selected
+# video file.
+# Usage: fvideo [pattern]
+
+# shellcheck disable=SC1091
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+source "$FSS_ROOT_DIR/lib/fd_builder.sh"
+source "$FSS_ROOT_DIR/lib/fzf_builder.sh"
+
+# Assign the first command line argument to 'pattern'
+pattern="$1"
+
+# Parse the VIDEO section from the configuration file
+parse_config "VIDEO" || { echo "Failed to parse config"; exit 1; }
+
+# Initialize the fd command and set type to file
+fd_add_type "f"
+
+# Add extensions to the search command
+fd_add_extensions "${EXTENSIONS[@]//\"/}"
+
+# Add the pattern to the search command if provided
+fd_set_pattern "$pattern"
+
+# Construct the fzf command with a preview
+fzf_add_preview "${PREVIEW_COMMAND//\"/} {}"
+
+# Use fd command to search for videos and pipe the results into the fzf command
+video_file=$(fd_execute | fzf_execute)
+
+# Open the selected video file if any were selected
+if [ -n "$video_file" ]; then
+    # Open the selected video file with the specified open command
+    eval "${OPEN_COMMAND//\"/} \"$video_file\"" &> /dev/null &
+fi
