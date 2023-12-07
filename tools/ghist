@@ -4,6 +4,7 @@
 # results in the fzf interface, and copy the selected command to the clipboard.
 # Usage: ghist [pattern]
 
+# shellcheck disable=SC1091
 source "$FSS_ROOT_DIR/lib/config_parser.sh"
 
 # Parse the SHELL section from the configuration file
