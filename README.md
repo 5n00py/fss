@@ -310,6 +310,39 @@ Each script's behavior can be customized via the `fss.conf` configuration file,
 allowing modifications to file extensions, preview commands, and default
 actions.
 
+## Acknowledgments
+
+This suite of search utilities, now a part of this dedicated project, has its
+roots in my personal journey with dotfiles. Over the years, what started as
+simple aliases and functions in my shell configurations, driven by my own needs
+and inspired by various dotfiles from the community, has evolved into a more
+structured approach. This evolution was marked by the introduction of a
+centralized configuration file, leading to the creation of this project. These
+tools have become an integral part of my daily workflow, addressing specific
+search tasks efficiently.
+
+The core design, architecture, and implementation of the tools and libraries is
+product of my initiative with personal experimentation and implementation as of
+my commitment to efficient workflow automation.
+
+While the foundation and primary development of this project are my own, it has
+been shaped and influenced by a multitude of external factors:
+
+- *Community Inspiration:* The various dotfiles and scripts available in the
+  public domain provided a wealth of ideas and practices. The contributions of
+  various developers are a constant source of inspiration and learning.
+- *Documentation Reflection:* See the documentations of the utilized tools.
+- *AI Assistance:* Mainly used for documentation, commenting and occasional
+  troubleshooting, particularly useful in ensuring clarity and coherence.
+- *[ShellCheck](https://www.shellcheck.net):* A great analysis tool to find bugs
+  in the shell scripts and improve the implementation.
+- *[SmartCommit](https://github.com/5n00py/SmartCommit):* The commit messages
+  are semi-automated with the SmartCommit tool to make the development process
+  more efficient and consistent.
+
+In conclusion, I extend my deepest gratitude to all the developers behind the
+search tools that have been integral to this project. 
+
 ## License
 
 The FunkyShellSearch is licensed under the GNU General Public License v3.0, see
