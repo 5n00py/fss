@@ -17,6 +17,12 @@ pattern="$1"
 # Parse the PDF section from the configuration file
 parse_config "PDF"
 
+# Check if OPEN_COMMAND is set
+if [ -z "$OPEN_COMMAND" ]; then
+    echo "OPEN_COMMAND is not set. Please check your configuration."
+    exit 1
+fi
+
 # Build the pdfgrep command using pdfgrep_builder.sh functions
 pdfgrep_set_pattern "$pattern"
 pdfgrep_add_ignore_case
@@ -35,7 +41,7 @@ if [ -z "$pattern" ]; then
 else
     fzf_add_preview "${PREVIEW_COMMAND_GREP//\"/} {}"
     # Execute the pdfgrep command and pass results to fzf
-    selected_result=$(pdfgrep_execute | fzf_execute)
+    selected_result=$(pdfgrep_execute 2>/dev/null | fzf_execute)
 
     # Extract filename and page number from the selection
     if [ -n "$selected_result" ]; then
