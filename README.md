@@ -154,3 +154,67 @@ To personalize the configs according to your needs follow these steps:
 Fss will prioritize the configuration file located at `~/.config/fss/fss.conf`
 if it is present.
 
+## Tools Overview
+
+Each script in `fss/tools` offers an efficient approach to searching,
+previewing, and taking action on various file types. Below, the scripts are
+described in more detail as for the default configuration:
+
+### `fimage`
+- **Search:** Uses `fd` to locate image files, supporting search pattern
+  refinement.
+- **Preview:** Features `chafa` for image previews in the `fzf` interface.
+- **Action on Selection:** Opens the selected image in `feh`.
+
+### `fkill`
+- **Search:** Interactively displays a list of running processes using `ps` and 
+  allows optional keyword-based filtering.
+- **Action on Selection:** Offers the ability to kill the selected process with 
+  the kill command `kill -9 [PID]`.
+
+### `fmusic`
+- **Search:** Uses `fd` to recursively find music files from the current
+  directory, optionally filterable by pattern.
+- **Preview:** Integrates `mpv` in `fzf` for audio previews of the search
+  results.
+- **Action on Selection:** Plays the selected music file using `mpv`.
+
+### `fvideo`
+- **Search:** Uses `fd` to search for video files from the current directory,
+  optionally filterable by pattern.
+- **Preview:** Integrates `mediainfo` in `fzf` for detailed information on
+  video files.
+- **Action on Selection:** Opens and plays the chosen video file using `mpv`.
+
+### `ghist`
+- **Search:** Uses `grep` to search for specified patterns of commands in the
+  shell history file (default is `~/.zshrc`).
+- **Action on Selection:** Copies the selected command from the history to the
+  clipboard using `xclip`. You can then paste and execute it directly in the 
+  terminal.
+
+### `gpdf`
+- **Search:** Uses `pdfgrep` to search for a specified pattern in PDF files 
+  within the current directory and its subdirectories. If no pattern is
+  provided it performs a `find` search for all PDF files.
+- **Preview:** Offers a text preview within `fzf` using `pdftotext`.
+- **Action on Selection:** Opens the selected PDF file at the specific page 
+  where the pattern was found, using `zathura` (or the first page if no pattern
+  provided).
+
+Each script's behavior can be customized via the `fss.conf` configuration file,
+allowing modifications to file extensions, preview commands, and default
+actions.
+
+## Usage
+
+Each script can be run directly from the command line. For example:
+
+```bash 
+fmusic "beatles"
+```
+
+## License
+
+This project is licensed under the GNU General Public License v3.0, see
+[LICENSE](LICENSE).
