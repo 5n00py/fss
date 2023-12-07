@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# gword: Search all files under the current directory for a given pattern.
+# Utilize 'ag' (silver searcher) for grep searching, fzf with the
+# PREVIEW_COMMAND from the config for preview and selection and open the
+# selected file with the OPEN_COMMAND from the config.
+# Usage: gword pattern
+
+# shellcheck disable=SC1091
+source "$FSS_ROOT_DIR/lib/config_parser.sh"
+source "$FSS_ROOT_DIR/lib/ag_builder.sh"
+source "$FSS_ROOT_DIR/lib/fzf_builder.sh"
+
+# Assign the first command line argument to 'pattern'
+pattern="$1"
+
+# Parse the TEXT section from the configuration file
+parse_config "TEXT" || { echo "Failed to parse TEXT config"; exit 1; }
+
+# Add ignore case option to the 'ag' command
+ag_add_ignore_case
+
+# Add line numbers to the 'ag' command
+ag_add_line_numbers
+
+# Set the search pattern for 'ag'
+ag_set_pattern "$pattern"
+
+# Set the path to the current directory
+ag_set_path "."
+
+# Check if a pattern is provided and set the appropriate preview command
+if [ -z "$pattern" ]; then
+    # No pattern provided; use PREVIEW_COMMAND_FIND
+    fzf_add_preview "${PREVIEW_COMMAND_FIND//\"/}"
+else
+    # Pattern provided; use PREVIEW_COMMAND_GREP
+    fzf_add_preview "${PREVIEW_COMMAND_GREP//\"/}"
+fi
+
+# Build the fzf command using fzf_builder.sh functions
+fzf_add_delimiter ':'
+fzf_add_preview_window_options 'top:66%'
+
+# Execute the 'ag' command and pipe the results into the fzf command
+selected_result=$(ag_execute 2>/dev/null | fzf_execute)
+
+# Process the selected result to extract file and line number
+if [ -n "$selected_result" ]; then
+    file=$(echo "$selected_result" | cut -d: -f1)
+    # Default to line 1 if no line number is provided
+    line=$(echo "$selected_result" | cut -d: -f2)
+    [ -z "$line" ] && line=1
+
+    # Substitute line and file into OPEN_COMMAND and execute
+    open_cmd=$(echo "$OPEN_COMMAND" | sed "s|{file}|$file|g" | sed "s|{line}|$line|g")
+    eval "$open_cmd"
+fi
