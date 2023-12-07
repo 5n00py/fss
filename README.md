@@ -41,6 +41,9 @@ the list of dependencies, based on the standard configuration:
   naming conflicts. In such cases, creating a symbolic link for `fd` or
   modifying the command name in the [fss.conf](/config/fss.conf) file is
   necessary, as simple aliasing will not suffice.
+- [find](https://www.gnu.org/software/findutils/): The classic file search
+  command from the `findutils` used for some utility tasks and as complement to
+  `fd`.
 - [fzf](https://github.com/junegunn/fzf): A command-line fuzzy finder for
   efficient file searching.
 - [grep](https://www.gnu.org/software/grep/): A versatile pattern matching and
@@ -248,12 +251,6 @@ described in more detail as for the default configuration:
 - **Preview:** Features `chafa` for image previews in the `fzf` interface.
 - **Action on Selection:** Opens the selected image in `feh`.
 
-### `fkill`
-- **Search:** Interactively displays a list of running processes using `ps` and 
-  allows optional keyword-based filtering.
-- **Action on Selection:** Offers the ability to kill the selected process with 
-  the kill command `kill -9 [PID]`.
-
 ### `fmusic`
 - **Search:** Uses `fd` to recursively find music files from the current
   directory, optionally filterable by pattern.
@@ -274,6 +271,12 @@ described in more detail as for the default configuration:
 - **Action on Selection:** Copies the selected command from the history to the
   clipboard using `xclip`. You can then paste and execute it directly in the 
   terminal.
+
+### `gkill`
+- **Search:** Uses `grep` search for specified patterns in running processes
+  provided by `ps`. If no pattern is provided all processes are listed.
+- **Action on Selection:** Offers the ability to kill the selected process with
+  the kill command `kill -9 [PID]`.
 
 ### `gpdf`
 - **Search:** Uses `pdfgrep` to search for a specified pattern in PDF files 
