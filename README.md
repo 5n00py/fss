@@ -11,6 +11,21 @@ handling capabilities within the shell environment.
 
 Stay tuned for updates!
 
+## Table of Contents
+
+- [Key Features](#key-features)
+- [Dependencies](#dependencies)
+  - [Basic Search Tools](#basic-search-tools)
+  - [Additional Utilities and Tools](#additional-utilities-and-tools)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+  - [Tools](#tools)
+  - [Library Integration](#library-integration)
+- [Tools Overview](#tools-overview)
+- [Acknowledgments](#acknowledgments)
+- [License](#license)
+
 ## Key Features
 
 - **Versatile Librariees:** At the heart of fss are robust libraries that offer
