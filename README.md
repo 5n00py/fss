@@ -34,8 +34,12 @@ the list of dependencies, based on the standard configuration:
 
 ### Basic Search Tools
 
+- [ag (The Silver Searcher)](https://github.com/ggreer/the_silver_searcher): A
+  fast code-searching tool, designed primarily for searching large bodies of
+  source code. It is used in tools like `gword`.
 - [fd](https://github.com/sharkdp/fd): A simple, fast, and user-friendly
-  alternative to `find`. 
+  alternative to `find`.
+
   **Important Note:** On certain Linux distributions,
   such as Debian, the `fd` command might be named `fdfind` or simlar, due to
   naming conflicts. In such cases, creating a symbolic link for `fd` or
@@ -61,6 +65,8 @@ the list of dependencies, based on the standard configuration:
   information on video files.
 - [mpv](https://github.com/mpv-player/mpv): A media player for audio
   playbacks.
+- [neovim](https://github.com/neovim/neovim): An extended version on Vim, the
+  venerable text editor.
 - [pdftotext](https://www.xpdfreader.com/pdftotext-man.html): Converts PDF
   pages to text for previews in PDF searches.
 - [zathura](https://pwmt.org/projects/zathura/): A lightweight, customizable
@@ -271,21 +277,34 @@ described in more detail as for the default configuration:
 - **Action on Selection:** Copies the selected command from the history to the
   clipboard using `xclip`. You can then paste and execute it directly in the 
   terminal.
+- **Fallback**: If no pattern is provided all history entries are piped into
+  fzf.
 
 ### `gkill`
 - **Search:** Uses `grep` search for specified patterns in running processes
-  provided by `ps`. If no pattern is provided all processes are listed.
+  provided by `ps`. 
 - **Action on Selection:** Offers the ability to kill the selected process with
   the kill command `kill -9 [PID]`.
+- **Fallback**: If no pattern is provided all processes are listed.
 
 ### `gpdf`
 - **Search:** Uses `pdfgrep` to search for a specified pattern in PDF files 
-  within the current directory and its subdirectories. If no pattern is
-  provided it performs a `find` search for all PDF files.
+  within the current directory and its subdirectories. 
 - **Preview:** Offers a text preview within `fzf` using `pdftotext`.
 - **Action on Selection:** Opens the selected PDF file at the specific page 
   where the pattern was found, using `zathura` (or the first page if no pattern
   provided).
+- **Fallback:** If no pattern is provided it performs a `find` search for all 
+  PDF files.
+
+### `gword`
+- **Search:** Utilizes `ag` (The Silver Searcher) to perform a grep-style
+  search across all files under the current directory for a given pattern.
+  Primarily focussing on code searches.
+- **Preview:** Incorporates dynamic preview functionality in `fzf`, with `bat`
+  for syntax-highlighted file previews.
+- **Action on Selection:** Opens the selected file at the identified line
+  number in nvim for immediate editing or review.
 
 Each script's behavior can be customized via the `fss.conf` configuration file,
 allowing modifications to file extensions, preview commands, and default

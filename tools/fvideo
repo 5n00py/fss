@@ -30,7 +30,7 @@ fd_set_pattern "$pattern"
 fzf_add_preview "${PREVIEW_COMMAND//\"/} {}"
 
 # Use fd command to search for videos and pipe the results into the fzf command
-video_file=$(fd_execute | fzf_execute)
+video_file=$(fd_execute 2>/dev/null | fzf_execute)
 
 # Open the selected video file if any were selected
 if [ -n "$video_file" ]; then

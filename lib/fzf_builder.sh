@@ -6,7 +6,7 @@
 #   utility.
 #   Designed to be sourced in other scripts or shell sessions.
 # Example:
-#   source path/to/fzf_builder.sh
+#   source $FSS_ROOT_DIR/lib/fzf_builder.sh
 #   fzf_add_preview 'cat {}'
 #   fzf_add_delimiter ':'
 #   fzf_build_command

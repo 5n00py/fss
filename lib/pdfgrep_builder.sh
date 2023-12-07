@@ -6,7 +6,7 @@
 #   utility.
 #   Designed to be sourced in other scripts or shell sessions.
 # Example:
-#   source pdfgrep_builder.sh 
+#   source $FSS_ROOT_DIR/pdfgrep_builder.sh 
 #   pdfgrep_add_ignore_case
 #   pdfgrep_add_recursive
 #   pdfgrep_add_print_page_number
