@@ -2,7 +2,7 @@
 
 FunkyShellSearch (fss) is designed to improve your command-line search
 experience. It integrates powerful find and grep utilities like `fd`, `ag` and
-`pdfgrep` with the intuitive fzf fuzzy finder. The goal is to create a more
+`pdfgrep` with the intuitive `fzf` fuzzy finder. The goal is to create a more
 user-friendly and interactive shell-based search environment.
 
 As an ongoing project, FunkyShellSearch will continue to evolve with additional
@@ -29,9 +29,8 @@ Stay tuned for updates!
 
 ## Dependencies
 
-The functionalities of FuzzyShellSearch scripts depend on several external
-tools. Below is the list of dependencies, based on the standard
-configuration:
+The functionalities of fss scripts depend on several external tools. Below is
+the list of dependencies, based on the standard configuration:
 
 ### Basic Search Tools
 
@@ -61,7 +60,8 @@ configuration:
   playbacks.
 - [pdftotext](https://www.xpdfreader.com/pdftotext-man.html): Converts PDF
   pages to text for previews in PDF searches.
-- [zathura](https://pwmt.org/projects/zathura/)
+- [zathura](https://pwmt.org/projects/zathura/): A lightweight, customizable
+  PDF viewer for opening PDF files.
 
 **Note:** Some of these dependencies are based on the default configuration of
 the scripts and might change if you modify the `fss.conf` configuration file.
@@ -94,7 +94,7 @@ chmod +x /path/to/fss/tools/*
 
 Don't forget to replace `/path/to/fss` with the actual path.
 
-### 3. Add the Scripts Your PATH 
+### 3. Add the Scripts to Your PATH 
 
 Set the `FSS_ROOT_DIR` environment variable to the path of the cloned `fss`
 repository. This allows the scripts to correctle source configurations and
@@ -125,9 +125,10 @@ source ~/.zshrc     # For Zsh
 
 ## Configuration
 
-The fss project comes equipped with a default configuration file, [fss.conf](/config/fss.conf),
-which is sources automatically by the project's scripts. This default
-configuration sets up the essential parameters for the tool's operation.
+The fss project comes equipped with a default configuration file,
+[fss.conf](/config/fss.conf), which is sources automatically by the project's
+scripts. This default configuration sets up the essential parameters for the
+tool's operation.
 
 To personalize the configs according to your needs follow these steps:
 
@@ -156,7 +157,7 @@ if it is present.
 
 ## Tools Overview
 
-Each script in `fss/tools` offers an efficient approach to searching,
+Each script in [fss/tools](/tools/) offers an efficient approach to searching,
 previewing, and taking action on various file types. Below, the scripts are
 described in more detail as for the default configuration:
 
@@ -208,13 +209,91 @@ actions.
 
 ## Usage
 
-Each script can be run directly from the command line. For example:
+### Tools
+
+Each script can be run directly from the command line. For instance, to search
+for music files containing the word "funk", you would run:
 
 ```bash 
-fmusic "beatles"
+fmusic "funk"
 ```
+
+**Important Notes:**
+
+- The search operation begins from your current working directory. Currently,
+  the tools do not support specifying a different path as an argument. To
+  search in a different location, you should first navigate (cd) to the desired
+  directory.
+- By default, the search patterns are treated as regular expressions, providing
+  powerful and flexible search capabilities.
+
+**Distinction Between Find, Grep and Fuzzy Searches:**
+
+The tools are intuitively categorized based on their primary search
+functionality.
+
+- *Find Search Tools* (`f` prefix): Tools like `fimage`, `fmusic`, etc. are
+  primarely used for locating files based on attributes such as file name, file
+  type, or other file properties. They don't require a pattern to initiate a
+  search and are ideal for broad file discovery tasks within the current
+  directory.
+- *Grep Search Tools* (`g` prefix): Tools beginning with `g` such as `gpdf`,
+  `ghist`, etc., are designed for content-based searches within files. They
+  leverate pattern matching (regular expressions) to find specific content,
+  making them powerful for detailed searches.
+- *Fallback Mechanism*: The grep search tools are versatile. If no search
+  pattern is provided, they automatically revert to a "find" search mode if
+  suitable. For example `gpdf` will default to listing all PDF files in the
+  current directory if no specific patter is given.
+- *Fuzzy Finder*: The command-line fuzzy finder `fzf` provides an interactive
+  and responsive search experience. For file based searches it actively filters
+  and updates the list of file names based on your input.
+
+### Library Integration 
+
+The [libraries](/lib/) can be easily integrated into custom shell scripts.
+Utilize the `FSS_ROOT_DIR` variable for sourcing libraries and constructing
+custom commands. The functions provided in these libraries allow you to add
+various options, patterns and paths. Additionally they eneble the execution of
+tailored search commands.
+
+For example, to create a case-insensitive search for the pattern "example" in
+`.txt` and `.md` files using the `fd` command, you would use:
+
+```bash
+source $FSS_ROOT_DIR/lib/fd_builder.sh 
+fd_add_type "f"
+fd_add_extensions "txt" "md"
+fd_add_ignore_case
+fd_set_pattern "example"
+fd_set_path "/path/to/search"
+fd_execute
+```
+
+This flexibility can also be beneficial for interactive shell sessions,
+allowing you to experiment with different search methodologies and refine your
+approach on the fly.
+
+To integrate the `fss.conf` file use the [config
+parser](/lib/config_parser.sh). This parser is designed to read the `fss.conf`
+file and import configuration settings for the provided section.
+
+For example, to load configurations for images:
+```bash
+source $FSS_ROOT_DIR/lib/config_parser.sh
+parse_config "IMAGE"
+```
+
+Once parsed, the configuration settings from the consen section become
+available as environment variables. This allows for easy access and use in
+custom scripts.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0, see
+The FunkyShellSearch is licensed under the GNU General Public License v3.0, see
 [LICENSE](LICENSE).
+
+As this project depends on various external projects, each with its own
+licensing terms, it is important to be aware of and comply with these
+respective licenses. Please review the licenses of these projects to ensure
+compliance with their terms when using fss.
