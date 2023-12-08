@@ -22,6 +22,8 @@ Stay tuned for updates!
   - [Basic Search Tools](#basic-search-tools)
   - [Additional Utilities and Tools](#additional-utilities-and-tools)
 - [Installation](#installation)
+  - [Manual Installation](#manual-installation)
+  - [Using the Setup Script](#using-the-setup-script)
 - [Configuration](#configuration)
 - [Usage](#usage)
   - [Tools](#tools)
