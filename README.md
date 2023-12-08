@@ -1,5 +1,7 @@
 # FunkyShellSearch (fss) ♫♪♪♫♪♪
 
+![FSS Preview](preview/fss-preview.gif)
+
 FunkyShellSearch (fss) is designed to make your command-line search experience
 more user-friendly. It integrates powerful find and grep utilities like `fd`,
 `ag` and `pdfgrep` with the intuitive `fzf` fuzzy finder. The goal is to
